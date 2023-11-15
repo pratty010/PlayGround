@@ -2,8 +2,8 @@ import typer
 from typing_extensions import Annotated
 from rich.console import Console
 import subprocess
-from onepiece.utils import netutils, cmdutils
-from onepiece.net.netmapper import rustscan, nmap
+from utilities import netutils, cmdutils
+from nettools.mapper import nmap, rustscan
 
 
 app = typer.Typer()

@@ -1,7 +1,7 @@
 import re
 import typer
 from rich.console import Console
-from onepiece.utils import cmdutils
+from utilities import cmdutils
 
 console = Console()
 
