@@ -47,7 +47,7 @@ def port_check(ports: str, tool:str) -> str:
             return None
         elif "1-1024" in ports:
             return "--top"
-        elif "," in ports:
+        elif "," in ports or ports.isnumeric():
             return "--ports {}".format(ports)
         elif "-" in ports:
             return  "--range {}".format(ports)
@@ -57,7 +57,7 @@ def port_check(ports: str, tool:str) -> str:
     elif tool == "nmap":
         if ports == "1-65535":
             return "-p-"
-        return  "-p{}".format(ports) if ports else "no-ports-set"
+        return  "-p {}".format(ports) if ports else None
     else:
         console.print("\n[bold red][!][/bold red][red] Wrong tool name.[/red]\n")
         return None

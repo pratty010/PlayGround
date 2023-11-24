@@ -1,51 +1,42 @@
 from rich.console import Console
-
 from InquirerPy import prompt, inquirer
-from InquirerPy.validator import PathValidator
+from InquirerPy.validator import PathValidator, EmptyInputValidator
 
 from src.tools.nettools import ping, mapper
+from src.utilities import netutils
 
 console = Console()
 
-def net():
-    console.print(f"\n[bold yellow][~][/bold yellow][yellow] Entering into network toolkit[/yellow]\n")
-    
-    scan = inquirer.select(
-        message="Please select the weapon for enumeration:",
-        choices=["Ping Scan", "Network Mapper"],
-        default="Network Mapper",
-        ).execute()
-    
-    # print(scan)
 
+def mapper_scn(ip: str):
+    """
+    This function is initiate a network mapper function.
+
+    Arguments:
+    ip  - IP of the remote host, must be a string.
+    """ 
+    
     questions = [
         {
             "type": "list",
             "message": "What network mapper you want to enumerate with?:",
-            "choices": ["Nmap", "Rustscan"],
-            "default": "Rustscan",
+            "choices": ["Nm4p", "Ru5t5c4n"],
+            "default": "Ru5t5c4n",
+            "filter": lambda results: "nmap" if results == "Nm4p" else "rustscan", 
             "name": "mapper",
-            "when": lambda results: scan == "Network Mapper",
-        },
-        {
-            "type": "confirm",
-            "message": "Want the scan to be silent?",
-            "default": False,
-            "name": "silent",
-            "long_instruction": "No output to the screen if set.",
         },
         {
             "type": "confirm",
             "message": "Want the store the results?",
             "default": False,
             "name": "store",
-            "when": lambda results: scan == "Network Mapper",
+            "long_instruction": "If set to no, the print output to screen will be set to True by default.",
         },
         {
             "type": "list",
             "message": "Please select the format for the results to be stored in:",
             "choices": ["-oN", "-oS", "-oG", "-oX", "-oA"],
-            "default": "-oN",
+            "default": "-oA",
             "name": "format",
             "long_instruction": "-oN: Output scan in normal text\n-oX: Output scan in XML\n-oS: Output scan in s|<rIpt kIddi3 format\n-oG: Output scan in Grepable format\n-oA: Output in the three major formats at once",   
             "when": lambda results: results["store"],
@@ -59,13 +50,82 @@ def net():
             "invalid_message": "Not a directory.",
             "when": lambda results: results["store"],
         },
+        {
+            "type": "confirm",
+            "message": "Want the scan to be silent?",
+            "default": False,
+            "name": "silent",
+            "long_instruction": "If set to Yes, will not print output to screen as STDOUT.",
+            "when": lambda results: results["store"],
+        },
+    ]
+
+    results = prompt(questions=questions)
+    # print(results)
+
+    # To set output to screen if store option not set.
+    if not results["store"]:
+        results["silent"] = False
+    # print(results)
+
+    mapper.mapper_scan(ip, results["format"], results["outpath"], results["silent"], results["mapper"])
+
+
+def ping_scn(ip: str):
+    """
+    This function pings the remote IP by calling the ping_scan function.
+
+    Arguments:
+    ip  - IP of the remote host, must be a string.
+    """
+
+    console.print(f"\n[bold yellow][~][/bold yellow][yellow] Ping is on.[/yellow]\n")
+    ping.ping_scan(ip)
+
+
+def net():
+    """
+    This function houses all the network enumeration related tools.
+
+    Tools Supported:
+    1. Ping - Common tools to ping the host.
+    2. Network Mappers - Tools to do active enumeration of the services running on an IP.
+        1. Nmap - Commonly known tool for services enumeration.
+        2. Rustscan - Nmap on steroids.
+    3. FTP - Tool to interact with anonymous FTP logins if allowed.
+    """
+
+    console.print(f"\n[bold yellow][~][/bold yellow][yellow] Entering into network toolkit[/yellow]\n")
+    
+    # To select the network tool of choice
+    scan = inquirer.select(
+        message="Please select the weapon for enumeration:",
+        choices=["P1n9 5c4n", "N37w0rk M4pp3r", "F7P"],
+        default="N37w0rk M4pp3r",
+        ).execute()
+    # print(scan)
+
+    # Collect the IP for scan
+    questions = [
+        {
+            "type": "input",
+            "message": "Please input the IP to be scanned:",
+            "default": "127.0.0.1",
+            "name": "ip",
+            "validate": EmptyInputValidator(),
+            "invalid_message": "IP can't be empty.",
+            "validate": netutils.ip_check,
+            "invalid_message": "Wrong IP format. Example format - [x.x.x.x , x.google.com, x.x.x.x.x.x].",
+        }, 
     ]
 
     results = prompt(questions=questions)
     # print(results)
     
-    if scan == "ping scan":
-        ping.ping(results["silent"])
-    elif scan == "Network Mapper":
-        mapper.mapper_scan(results["silent"], results["format"], results["outpath"], results["mapper"])
+    if scan == "P1n9 5c4n":
+        ping_scn(results["ip"])
+    elif scan == "N37w0rk M4pp3r":
+        mapper_scn(results["ip"])
+    elif scan == "F7P":
+        print("Finding Anonymous Logins.")
 
