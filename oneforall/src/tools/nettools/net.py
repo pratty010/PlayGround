@@ -1,19 +1,22 @@
 from rich.console import Console
 from InquirerPy import prompt, inquirer
 from InquirerPy.validator import PathValidator, EmptyInputValidator
+import sys
 
-from src.tools.nettools import ping, mapper
-from src.utilities import netutils
+from src.tools.nettools import ping, mapper, ftp
+from src.utilities import netutils, cmdutils
 
 console = Console()
 
 
-def mapper_scn(ip: str):
+def mapper_scn(ip: str, outpath: str, silent: bool):
     """
     This function is initiate a network mapper function.
 
     Arguments:
-    ip  - IP of the remote host, must be a string.
+    ip        - IP of the remote host, must be a string.
+    silent    - To turn off output to the shell, must be a bool.
+    outpath   - Path for the output file to be stored at, must be an string.
     """ 
     
     questions = [
@@ -26,49 +29,20 @@ def mapper_scn(ip: str):
             "name": "mapper",
         },
         {
-            "type": "confirm",
-            "message": "Want the store the results?",
-            "default": False,
-            "name": "store",
-            "long_instruction": "If set to no, the print output to screen will be set to True by default.",
-        },
-        {
             "type": "list",
             "message": "Please select the format for the results to be stored in:",
             "choices": ["-oN", "-oS", "-oG", "-oX", "-oA"],
             "default": "-oA",
             "name": "format",
             "long_instruction": "-oN: Output scan in normal text\n-oX: Output scan in XML\n-oS: Output scan in s|<rIpt kIddi3 format\n-oG: Output scan in Grepable format\n-oA: Output in the three major formats at once",   
-            "when": lambda results: results["store"],
-        },
-        {
-            "type": "filepath",
-            "message": "Please provide the directory to store the results:",
-            "default": "./",
-            "name": "outpath",
-            "validate": PathValidator(is_dir=True),
-            "invalid_message": "Not a directory.",
-            "when": lambda results: results["store"],
-        },
-        {
-            "type": "confirm",
-            "message": "Want the scan to be silent?",
-            "default": False,
-            "name": "silent",
-            "long_instruction": "If set to Yes, will not print output to screen as STDOUT.",
-            "when": lambda results: results["store"],
+            "when": lambda results: outpath,
         },
     ]
 
     results = prompt(questions=questions)
     # print(results)
 
-    # To set output to screen if store option not set.
-    if not results["store"]:
-        results["silent"] = False
-    # print(results)
-
-    mapper.mapper_scan(ip, results["format"], results["outpath"], results["silent"], results["mapper"])
+    mapper.mapper_scan(ip, results["format"], outpath, silent, results["mapper"])
 
 
 def ping_scn(ip: str):
@@ -78,9 +52,16 @@ def ping_scn(ip: str):
     Arguments:
     ip  - IP of the remote host, must be a string.
     """
+    
+    tool= "ping"
 
-    console.print(f"\n[bold yellow][~][/bold yellow][yellow] Ping is on.[/yellow]\n")
-    ping.ping_scan(ip)
+    # To check if the binary exists
+    if cmdutils.bin_check(tool):
+        console.print(f"\n[bold yellow][~][/bold yellow][yellow] Ping is on.[/yellow]\n")
+        ping.ping_scan(ip, tool)
+    #program exits
+    else:
+        sys.exit()
 
 
 def net():
@@ -116,16 +97,46 @@ def net():
             "invalid_message": "IP can't be empty.",
             "validate": netutils.ip_check,
             "invalid_message": "Wrong IP format. Example format - [x.x.x.x , x.google.com, x.x.x.x.x.x].",
+        },
+        {
+            "type": "confirm",
+            "message": "Want the store the results?",
+            "default": False,
+            "name": "store",
+            "long_instruction": "If set to no, the print output to screen will be set to True by default.",
+            "when": lambda results: scan in ["N37w0rk M4pp3r", "F7P"]
+        },
+        {
+            "type": "filepath",
+            "message": "Please provide the directory to store the results:",
+            "default": "./",
+            "name": "outpath",
+            "validate": PathValidator(is_dir=True),
+            "invalid_message": "Not a valid directory.",
+            "when": lambda results: results["store"],
+        },
+        {
+            "type": "confirm",
+            "message": "Want the scan to be silent?",
+            "default": False,
+            "name": "silent",
+            "long_instruction": "If set to Yes, will not print output to screen as STDOUT.",
+            "when": lambda results: results["store"],
         }, 
     ]
 
     results = prompt(questions=questions)
     # print(results)
+
+    # To set output to screen if store option not set.
+    if not results["store"]:
+        results["silent"] = False
+    # print(results)
     
     if scan == "P1n9 5c4n":
         ping_scn(results["ip"])
     elif scan == "N37w0rk M4pp3r":
-        mapper_scn(results["ip"])
+        mapper_scn(results["ip"], results["outpath"], results["silent"])
     elif scan == "F7P":
-        print("Finding Anonymous Logins.")
+        ftp.ftp_scan(results["ip"], results["outpath"], results["silent"])
 

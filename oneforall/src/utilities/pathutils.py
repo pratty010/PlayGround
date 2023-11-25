@@ -13,14 +13,25 @@ def cpath(path:str, tool:str, file: str) -> str:
     file    - Name of the outfile, must be a string.
     """
     
+    # to take care of frontal and trailing /
+    if len(tool) == 1:
+        if tool[0] == "/":
+            tool = ""
+    else:
+        if tool[0] == "/":
+            tool = tool[1:]
+        if tool[-1] == "/":
+            tool = tool[:-1]
+
     # Creating dir and file path 
     dir = os.path.join(path, tool)
     fpath = os.path.join(dir, file)
-    console.print("[bold yellow][~][/bold yellow][yellow] Creating results file if it doesn't exist --> {}.[/yellow]\n".format(fpath))
+    console.print("\n[bold yellow][~][/bold yellow][yellow] Generating results file if it doesn't exist --> {}.[/yellow]".format(fpath))
 
     # Create directories recursively
     os.makedirs(dir, exist_ok=True)  # exist_ok=True will prevent any error if the directory already exists
 
+    # print(dir, fpath)
     return fpath
 
     

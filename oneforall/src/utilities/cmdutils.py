@@ -21,9 +21,9 @@ def bin_check(bin: str) -> bool:
 
     # If not None, bin exists
     if path:
-        console.print(f"\n[bold green][>][/bold green][green] {bin} binary found in system at {path}. Moving on..[/green]\n")
+        console.print(f"\n[bold green][>][/bold green][green] {bin} Binary found in system at {path}. Moving on..[/green]")
         return True
-    console.print(f"\n[bold red][!][/bold red][red] {bin} binary missing. Might want to install it and add to your $PATH.[/red]\n")
+    console.print(f"\n[bold red][!][/bold red][red] {bin} Binary missing. Please install it and add to it your $PATH.[/red]")
     return False
 
 
