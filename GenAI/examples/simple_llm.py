@@ -1,24 +1,22 @@
 from langchain_community.llms import Ollama
-# import ollama
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 import os
 from time import time
 
-
 # Set the LangChain tracing global paramater
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "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"
+os.environ['LANGCHAIN_TRACING_V2'] = "true"
+os.environ['LANGCHAIN_ENDPOINT'] = "https://api.smith.langchain.com"
+os.environ['LANGCHAIN_API_KEY'] = "<API-KEY>"
+os.environ['LANGCHAIN_PROJECT'] = "<PROJ-NAME>"
 
 # create a global instance of the LLM model of choice and set parameters
 llm = Ollama(
-    model = "llama2",
-    stream = True,
+    model = "llama3",
     num_gpu = 16,
     # format = "json",
     )
-
 # client = ollama.Client(host='http://localhost:11434')
 
 # Define the global parser for the data recieved from LLM to be parsed in human format.
@@ -60,8 +58,8 @@ def simple():
     # print(parres)
     
     # return results
-    return res
-    # return parres
+    # return res
+    return parres
 
 
 def chain():

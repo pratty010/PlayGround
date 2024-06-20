@@ -7,19 +7,14 @@ from langchain_core.prompts import ChatPromptTemplate
 from typing import List
 import os
 
-# Set the LangChain tracing global paramater
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_API_KEY"] = "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"
-
 # create a global instance of the LLM model of choice and set parameters
 llm = Ollama(
-    model = "mistral",
-    num_gpu = 8,
+    model="llama3"
     # format = "json",
     )
 
 ollmaebd = OllamaEmbeddings(
-    model="mistral",
+    model="llama3",
 )
 
 # Test documents with page contents and metadata.
@@ -44,6 +39,10 @@ test_documents = [
     Document(
         page_content="Rabbits are social animals that need plenty of space to hop around.",
         metadata={"source": "mammal-pets-doc"},
+    ),
+    Document(
+        page_content="Planets are cool.",
+        metadata={"source": "planets-pets-doc"},
     ),
 ]
 
@@ -201,7 +200,7 @@ def prompt_ret_search(vectorstore):
     rag_chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | llm
 
     # Invoke the RAG chain with the question "tell me about cats"
-    response = rag_chain.invoke("tell me about cats")
+    response = rag_chain.invoke("tell me about planets")
     
     # Print the generated answer
     print(response)
@@ -211,10 +210,11 @@ def prompt_ret_search(vectorstore):
 def main():
     vectorstore = create_vectors()
     # res = vector_search(vectorstore)
-    res = retriever_search(vectorstore)
-    # res = prompt_ret_search(vectorstore)
+    # res = retriever_search(vectorstore)
+    res = prompt_ret_search(vectorstore)
+    print(vectorstore.delete_collection())
 
-    print(res)
+    # print(res)
 
 if __name__ == "__main__":
     main()
