@@ -126,9 +126,11 @@ def income_sheet_fa(ticker, time_period) -> pd.DataFrame:
     
 
     # store the raw statement in the database for later query
-    income_stmt_raw_T.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw_T.xlsx")
+    # income_stmt_raw_T.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw_T.xlsx")
     # print(income_stmt)
-    income_stmt.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw.xlsx")
+    income_stmt_raw_T.to_csv(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw_T.csv")
+    # income_stmt.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw.xlsx")
+    income_stmt.to_csv(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}_raw.csv")
 
     # extract the useful features from the statement
     columns = [
@@ -177,7 +179,8 @@ def income_sheet_fa(ticker, time_period) -> pd.DataFrame:
         )
 
     # save the final statement
-    income_stmt_final.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}.xlsx")
+    # income_stmt_final.to_excel(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}.xlsx")
+    income_stmt_final.to_csv(f"fin_bot/data/financials/income_statements/income_stmt_{time_period}_{stock}.csv")
 
     # plot some useful informmation.
     plt.figure(figsize=(22, 18))
@@ -259,9 +262,11 @@ def balance_sheet_fa(ticker, time_period) -> pd.DataFrame:
     balance_sheet = balance_sheet_raw_T.T
 
     # Save the raw balance sheet data to an Excel file
-    balance_sheet_raw_T.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw_T.xlsx")
+    # balance_sheet_raw_T.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw_T.xlsx")
+    balance_sheet_raw_T.to_csv(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw_T.csv")
     # print(balance_sheet)
-    balance_sheet.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw.xlsx")
+    # balance_sheet.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw.xlsx")
+    balance_sheet.to_csv(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}_raw.csv")
 
     # Define the columns to include in the final balance sheet report
     columns = [
@@ -311,7 +316,8 @@ def balance_sheet_fa(ticker, time_period) -> pd.DataFrame:
         )
 
     # Save the final balance sheet report to an Excel file
-    balance_sheet_final.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}.xlsx")
+    # balance_sheet_final.to_excel(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}.xlsx")
+    balance_sheet_final.to_csv(f"fin_bot/data/financials/balance_sheet/balance_sheet_{time_period}_{stock}.csv")
 
     # Create a plot to visualize the debt vs equity
     plt.figure(figsize=(22, 18))
@@ -372,8 +378,10 @@ def cashflow_stmt_fa(ticker, time_period) -> pd.DataFrame:
     cashflow = cashflow_raw_T.T
 
     # Save the raw balance sheet data to an Excel file
-    cashflow_raw_T.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw_T.xlsx")
-    cashflow.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw.xlsx")
+    # cashflow_raw_T.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw_T.xlsx")
+    cashflow_raw_T.to_csv(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw_T.csv")
+    # cashflow.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw.xlsx")
+    cashflow.to_csv(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}_raw.csv")
 
     # Define the columns to include in the final balance sheet report
     columns = [
@@ -423,7 +431,8 @@ def cashflow_stmt_fa(ticker, time_period) -> pd.DataFrame:
         )
 
     # Save the final balance sheet report to an Excel file
-    cashflow_final.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}.xlsx")
+    # cashflow_final.to_excel(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}.xlsx")
+    cashflow_final.to_csv(f"fin_bot/data/financials/cashflow/cashflow_{time_period}_{stock}.csv")
 
     return cashflow_final
 
@@ -585,13 +594,13 @@ def main():
     # print(actions.head)
 
     # stmt = income_sheet_fa(ticker, "annually")
-    stmt = balance_sheet_fa(ticker, "annually")
-    # stmt = cashflow_stmt_fa(ticker, "annually")
+    # stmt = balance_sheet_fa(ticker, "annually")
+    stmt = cashflow_stmt_fa(ticker, "annually")
     print(stmt)
 
-    data = yf.download(stock, start='2023-12-01', end=None)
+    # data = yf.download(stock, start='2023-12-01', end=None)
     # print(data)
-    indicators = get_indicators(data)
+    # indicators = get_indicators(data)
     # print(indicators)
     
     # rec = get_recommendations(ticker)
