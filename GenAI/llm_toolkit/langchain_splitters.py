@@ -32,8 +32,8 @@ def char_splitter(data: list) -> list:
     # Initialize the CharacterTextSplitter with specific parameters
     char_splitter = CharacterTextSplitter(
         separator="\n\n",  # The separator to split the document
-        chunk_size=100,  # The maximum size of each chunk
-        chunk_overlap=20,  # The overlap between chunks
+        chunk_size=1000,  # The maximum size of each chunk
+        chunk_overlap=400,  # The overlap between chunks
         length_function=len,  # The function to calculate the length of a chunk
         is_separator_regex=False,  # Whether the separator is a regular expression
     )
@@ -82,8 +82,8 @@ def rec_char_splitter(data: list, language: str=None) -> list:
             "\u3002",  # Ideographic full stop
             "",
             ],
-            chunk_size=100,
-            chunk_overlap=20,
+            chunk_size=1000,
+            chunk_overlap=200,
             length_function=len,
             is_separator_regex=False,
         )
@@ -91,8 +91,8 @@ def rec_char_splitter(data: list, language: str=None) -> list:
         # If a language is specified, use the corresponding text splitter
         text_splitter = RecursiveCharacterTextSplitter.from_language(
             language=language,
-            chunk_size=50,
-            chunk_overlap=0,
+            chunk_size=500,
+            chunk_overlap=100,
         )
 
     # Split the document into smaller chunks and return the list of smaller documents

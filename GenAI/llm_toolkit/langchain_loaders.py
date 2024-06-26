@@ -5,6 +5,38 @@ import requests
 import tempfile
 import os
 
+def text_loader(file_path: str) -> list:
+    """
+    This function loads text data from a specified file path into a list of Document objects.
+
+    Parameters:
+    file_path (str): The path to the text file to be loaded.
+
+    Returns:
+    list: A list of Document objects, where each Document represents a line in the text file.
+
+    Raises:
+    AssertionError: If the loaded data does not contain at least one Document object.
+
+    Note:
+    This function uses the TextLoader class from the langchain_community.document_loaders module.
+    It automatically detects the encoding of the text file.
+    """
+
+    # Create an instance of TextLoader with the specified file path and autodetect encoding
+    loader = TextLoader(
+        file_path = file_path,
+        autodetect_encoding=True,
+    )
+
+    # Load data from the text file
+    data = loader.load()
+
+    # Assert that the loaded data contains at least one Document object
+    assert isinstance(data[0], Document)
+
+    return data
+
 def csv_loader(file_path: str, csv_args: dict = {
             "delimiter": ",",
             "quotechar": '"',
@@ -152,7 +184,7 @@ def pdf_loader(file_path: str) -> list:
     pages = loader.load()
 
     # Assert that the loaded data contains Document object
-    assert len(pages) == 1
+    # assert len(pages) == 1
     assert isinstance(pages[0], Document)
 
     # Return the loaded data
@@ -233,15 +265,15 @@ def main():
     dir_path = "/home/ace/PlayGround/GenAI/fin_bot/data/financials/income_statements"
     url_paths = ["https://codedamn-classrooms.github.io/webscraper-python-codedamn-classroom-website/", "https://codedamn-classrooms.github.io/webscraper-python-codedamn-classroom-website/"]
     
-
+    data = text_loader(md_file_path)
     # data = csv_loader(csv_file_path, {})
     # data = dir_loader(dir_path, "**/*.csv", CSVLoader)
     # data = htmlbs4_loader(url_paths)
     # data = md_loader(md_file_path)
     # data = pdf_loader(pdf_file_path)
-    data = python_loader(py_file_path)
+    # data = python_loader(py_file_path)
 
-    print(data[0].page_content)
+    print(data)
 
 if __name__ == "__main__":
     main()
