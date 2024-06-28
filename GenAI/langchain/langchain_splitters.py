@@ -12,7 +12,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 import sys
 sys.path.append("/home/ace/PlayGround/GenAI/")
 
-from llm_toolkit import langchain_loaders
+from GenAI.langchain import langchain_loaders
 
 embd = OllamaEmbeddings(
     model="llama3"

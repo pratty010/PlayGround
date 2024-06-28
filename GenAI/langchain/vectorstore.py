@@ -9,10 +9,13 @@ from langchain.retrievers.document_compressors import LLMChainExtractor, LLMChai
 from langchain_community.document_transformers import EmbeddingsRedundantFilter, EmbeddingsClusteringFilter
 from langchain_text_splitters import CharacterTextSplitter
 
+from langchain_community.output_parsers import StrOutputParser
+
 import sys
 sys.path.append("/home/ace/PlayGround/GenAI/")
 
-from llm_toolkit import langchain_loaders, langchain_splitters
+from GenAI.langchain import langchain_loaders
+from GenAI.langchain import langchain_splitters
 
 # create a global instance of the LLM model of choice and set parameters
 llm = Ollama(
@@ -253,7 +256,7 @@ def main():
 
     md_file_path = "/home/ace/PlayGround/GenAI/opt/test/Write_Up.md"
     pdf_file_path = "/home/ace/PlayGround/GenAI/opt/2021 FTE Onboarding Packet.pdf"
-    vectordb_path = "/home/ace/PlayGround/GenAI/llm_toolkit/data/.vectordb"
+    vectordb_path = "/home/ace/PlayGround/GenAI/langchain/data/.vectordb"
 
     query = "When are H1-B lottery results released?"
 
