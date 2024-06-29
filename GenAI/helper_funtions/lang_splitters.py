@@ -8,11 +8,11 @@ from langchain_experimental.text_splitter import SemanticChunker
 from langchain_core.documents import Document
 from langchain_community.embeddings import OllamaEmbeddings
 
-
 import sys
-sys.path.append("/home/ace/PlayGround/GenAI/")
 
-from GenAI.langchain import langchain_loaders
+sys.path.append("/home/ace/PlayGround/GenAI")
+
+from helper_funtions import lang_loaders
 
 embd = OllamaEmbeddings(
     model="llama3"
@@ -179,15 +179,15 @@ def main():
     py_file_path = "/home/ace/PlayGround/GenAI/fin_bot/yahoo_finance.py"
     url_paths = ["https://codedamn-classrooms.github.io/webscraper-python-codedamn-classroom-website/", "https://codedamn-classrooms.github.io/webscraper-python-codedamn-classroom-website/"]
     
-    fdata = langchain_loaders.md_loader(md_file_path)
+    fdata = lang_loaders.md_loader(md_file_path)
     print(fdata)
 
-    # data = char_splitter(fdata)
+    data = char_splitter(fdata)
     # data = rec_char_splitter(fdata)
     # data = rec_char_splitter(fdata, "python")
     # data = rec_char_splitter(fdata, "markdown")
     # data = md_splitter(fdata)
-    data = semantic_text_splitter(fdata)
+    # data = semantic_text_splitter(fdata)
 
     print(len(data))
 

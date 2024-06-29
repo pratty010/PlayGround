@@ -244,9 +244,9 @@ def few_shot_prompt() -> str:
     return res
 
 def main():
-    # res =  zero_shot_prompt()
+    res =  zero_shot_prompt()
     # res = one_shot_prompt()
-    res = few_shot_prompt()
+    # res = few_shot_prompt()
 
     print(res)
 
